@@ -23,8 +23,11 @@ def game_loop():
     global window
     global WINDOW_WIDTH
     global player
+
+    bullets = []
     while True:
         window.fill((0, 0, 0))
+        clock.tick(60)
 
         keys = pygame.key.get_pressed()
 
@@ -33,11 +36,19 @@ def game_loop():
         elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             player.move(Direction.RIGHT, WINDOW_WIDTH)
 
+
         player.draw(window)
 
-        for i in pygame.event.get():
-            if i.type == pygame.QUIT:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    player.shoot(bullets)
+
+        for bullet in bullets:
+            bullet.move()
+            bullet.draw(window)
 
         pygame.display.update()
 

@@ -1,5 +1,6 @@
 import pygame
 from Enums import Direction
+from Bullet import Bullet
 
 
 class Player:
@@ -17,14 +18,18 @@ class Player:
 
         if self.x >= 0:
             if direction == Direction.LEFT:
-                self.x -= 1
+                self.x -= 3
         if self.x <= window_width - self.rect[2]:
             if direction == Direction.RIGHT:
-                self.x += 1
+                self.x += 3
 
         self.rect[0] = self.x
 
     def draw(self, window):
         if not self.is_draw:
             window.blit(self.sprite, self.rect)
+
+    def shoot(self, bullets):
+        # if len(bullets) < 1:
+        bullets.append(Bullet(self.x, self.y))
         
