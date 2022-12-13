@@ -2,8 +2,8 @@ import pygame
 
 
 class Bullet:
-    bullet_width = 3
-    bullet_height = 12
+    bullet_width = 1
+    bullet_height = 4
     speed = 5
 
     def __init__(self, x, y, color):

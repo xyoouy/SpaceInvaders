@@ -2,6 +2,7 @@ import pygame
 import sys
 from Player import Player
 from Enums import Direction, Color
+from Enemy import Enemy
 
 pygame.init()
 
@@ -16,7 +17,9 @@ class Game:
         self.window = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.set_caption("Space Invaders")
         self.player = Player(300, 780)
+        self.enemy = Enemy(400, 200)
         self.player.draw(self.window)
+        self.enemy.draw(self.window)
         pygame.display.update()
 
     def Run(self):
@@ -31,7 +34,9 @@ class Game:
             elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
                 self.player.move(Direction.RIGHT, self.WINDOW_WIDTH)
 
+            self.enemy.move(self.WINDOW_WIDTH)
             self.player.draw(self.window)
+            self.enemy.draw(self.window)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

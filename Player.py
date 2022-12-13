@@ -34,4 +34,4 @@ class Player:
 
     def shoot(self):
         if len(self.bullets) < 5:
-            self.bullets.append(Bullet(self.x, self.y, Color.Blue))
+            self.bullets.append(Bullet(self.x, self.y, Color.Cyan))
