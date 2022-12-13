@@ -1,14 +1,17 @@
 import pygame
-from Enums import Direction
+from Enums import Direction, Color
 from Bullet import Bullet
 
 
 class Player:
+    speed = 3
+    is_draw = False
+    dead = False
+    bullets = list()
+
     def __init__(self, x, y):
-        self.is_draw = False
         self.x = x
         self.y = y
-        self.dead = False
         self.sprite = pygame.image.load("Sprites/PlayerSprite.png")
         self.rect = self.sprite.get_rect().move((x, y))
 
@@ -18,18 +21,17 @@ class Player:
 
         if self.x >= 0:
             if direction == Direction.LEFT:
-                self.x -= 3
+                self.x -= self.speed
         if self.x <= window_width - self.rect[2]:
             if direction == Direction.RIGHT:
-                self.x += 3
+                self.x += self.speed
 
-        self.rect[0] = self.x
+        self.rect.x = self.x
 
     def draw(self, window):
         if not self.is_draw:
             window.blit(self.sprite, self.rect)
 
-    def shoot(self, bullets):
-        # if len(bullets) < 1:
-        bullets.append(Bullet(self.x, self.y))
-        
+    def shoot(self):
+        if len(self.bullets) < 5:
+            self.bullets.append(Bullet(self.x, self.y, Color.Blue))

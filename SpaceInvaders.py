@@ -1,56 +1,59 @@
 import pygame
 import sys
 from Player import Player
-from Enums import Direction
+from Enums import Direction, Color
 
 pygame.init()
 
-WINDOW_WIDTH = 600
-WINDOW_HEIGHT = 900
 
-clock = pygame.time.Clock()
+class Game:
+    WINDOW_WIDTH = 600
+    WINDOW_HEIGHT = 900
+    FPS = 75
 
-window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-pygame.display.set_caption("Space Invaders")
-
-player = Player(322, 780)
-player.draw(window)
-pygame.display.update()
-
-
-def game_loop():
-    global clock
-    global window
-    global WINDOW_WIDTH
-    global player
-
-    bullets = []
-    while True:
-        window.fill((0, 0, 0))
-        clock.tick(60)
-
-        keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            player.move(Direction.LEFT, WINDOW_WIDTH)
-        elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            player.move(Direction.RIGHT, WINDOW_WIDTH)
-
-
-        player.draw(window)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    player.shoot(bullets)
-
-        for bullet in bullets:
-            bullet.move()
-            bullet.draw(window)
-
+    def __init__(self):
+        self.clock = pygame.time.Clock()
+        self.window = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
+        pygame.display.set_caption("Space Invaders")
+        self.player = Player(300, 780)
+        self.player.draw(self.window)
         pygame.display.update()
 
+    def Run(self):
+        while True:
+            self.window.fill(Color.Black.value)
+            self.clock.tick(self.FPS)
 
-game_loop()
+            keys = pygame.key.get_pressed()
+
+            if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+                self.player.move(Direction.LEFT, self.WINDOW_WIDTH)
+            elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+                self.player.move(Direction.RIGHT, self.WINDOW_WIDTH)
+
+            self.player.draw(self.window)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.player.shoot()
+
+            self.check_bullets()
+
+            pygame.display.update()
+
+    def check_bullets(self):
+        for bullet in self.player.bullets:
+            if bullet.y < 100:
+                self.player.bullets.remove(bullet)
+
+        for bullet in self.player.bullets:
+            bullet.move()
+            bullet.draw(self.window)
+
+
+game = Game()
+
+game.Run()
