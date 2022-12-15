@@ -10,7 +10,7 @@ pygame.init()
 class Game:
     WINDOW_WIDTH = 600
     WINDOW_HEIGHT = 900
-    FPS = 75
+    FPS = 300
 
     def __init__(self):
         self.clock = pygame.time.Clock()
@@ -18,6 +18,7 @@ class Game:
         pygame.display.set_caption("Space Invaders")
         self.player = Player(300, 780)
         self.enemy = Enemy(400, 200)
+        self.enemy_list = [self.enemy]
         self.player.draw(self.window)
         self.enemy.draw(self.window)
         pygame.display.update()
@@ -34,9 +35,11 @@ class Game:
             elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
                 self.player.move(Direction.RIGHT, self.WINDOW_WIDTH)
 
-            self.enemy.move(self.WINDOW_WIDTH)
+            for enemy in self.enemy_list:
+                enemy.move(self.WINDOW_WIDTH)
+                enemy.draw(self.window)
+
             self.player.draw(self.window)
-            self.enemy.draw(self.window)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -44,6 +47,10 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.player.shoot()
+                        for enemy in self.enemy_list:
+                            enemy.shoot()
+
+            self.check_colliding()
 
             self.check_bullets()
 
@@ -51,12 +58,29 @@ class Game:
 
     def check_bullets(self):
         for bullet in self.player.bullets:
-            if bullet.y < 100:
+            if not bullet.check_position():
                 self.player.bullets.remove(bullet)
+
+        for bullet in self.enemy.bullets:
+            if not bullet.check_position():
+                self.enemy.bullets.remove(bullet)
 
         for bullet in self.player.bullets:
             bullet.move()
             bullet.draw(self.window)
+
+        for bullet in self.enemy.bullets:
+            bullet.move()
+            bullet.draw(self.window)
+
+    def check_colliding(self):
+        for enemy in self.enemy_list:
+            for bullet in self.player.bullets:
+                if enemy.is_colliding(bullet):
+                    self.enemy_list.remove(enemy)
+                    self.player.bullets.remove(bullet)
+
+
 
 
 game = Game()

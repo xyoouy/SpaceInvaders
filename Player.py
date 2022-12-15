@@ -1,10 +1,10 @@
 import pygame
-from Enums import Direction, Color
+from Enums import Direction, Color, BulletType
 from Bullet import Bullet
 
 
 class Player:
-    speed = 3
+    speed = 1
     is_draw = False
     dead = False
     bullets = list()
@@ -19,13 +19,12 @@ class Player:
         if self.dead:
             return
 
-        if self.x >= 0:
+        if self.x > 0:
             if direction == Direction.LEFT:
                 self.x -= self.speed
-        if self.x <= window_width - self.rect[2]:
+        if self.x < window_width - self.rect.width:
             if direction == Direction.RIGHT:
                 self.x += self.speed
-
         self.rect.x = self.x
 
     def draw(self, window):
@@ -34,4 +33,11 @@ class Player:
 
     def shoot(self):
         if len(self.bullets) < 5:
-            self.bullets.append(Bullet(self.x, self.y, Color.Cyan))
+            self.bullets.append(Bullet(self.x, self.y, Color.Cyan, BulletType.Player))
+
+    def is_colliding(self, bullet):
+        if bullet.bullet_type == BulletType.Player:
+            return False
+
+        return self.rect.colliderect(bullet.rect)
+
