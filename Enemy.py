@@ -5,12 +5,14 @@ from Enums import Color, Direction, BulletType
 
 
 class Enemy:
-    speed = 1
+    speed = 0.25
     bullets = list()
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.shoot_timer = 0
+        self.shoot_timer_length = 10
         self.dead = False
         self.color = Color.Green.value
         self.sprite = pygame.transform.scale(pygame.image.load("Sprites/Enemy.png"), (40, 50))
@@ -35,11 +37,12 @@ class Enemy:
         window.blit(self.sprite, self.rect)
 
     def shoot(self):
-        if len(self.bullets) < 5:
+        self.shoot_timer += 0.01
+        if len(self.bullets) < 5 and self.shoot_timer >= self.shoot_timer_length:
             self.bullets.append(Bullet(self.x, self.y, self.color, BulletType.Enemy))
+            self.shoot_timer = 0
 
     def is_colliding(self, bullet):
-        print(self.rect.colliderect(bullet.rect))
         if bullet.bullet_type == BulletType.Enemy:
             return False
 

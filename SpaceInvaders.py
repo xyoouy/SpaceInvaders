@@ -17,10 +17,10 @@ class Game:
         self.window = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.set_caption("Space Invaders")
         self.player = Player(300, 780)
-        self.enemy = Enemy(400, 200)
-        self.enemy_list = [self.enemy]
+        self.enemy_list = [Enemy(400, 200), Enemy(300, 150)]
         self.player.draw(self.window)
-        self.enemy.draw(self.window)
+        for enemy in self.enemy_list:
+            enemy.draw(self.window)
         pygame.display.update()
 
     def Run(self):
@@ -41,14 +41,15 @@ class Game:
 
             self.player.draw(self.window)
 
+            for enemy in self.enemy_list:
+                enemy.shoot()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.player.shoot()
-                        for enemy in self.enemy_list:
-                            enemy.shoot()
 
             self.check_colliding()
 
@@ -60,18 +61,17 @@ class Game:
         for bullet in self.player.bullets:
             if not bullet.check_position():
                 self.player.bullets.remove(bullet)
-
-        for bullet in self.enemy.bullets:
-            if not bullet.check_position():
-                self.enemy.bullets.remove(bullet)
-
-        for bullet in self.player.bullets:
+                continue
             bullet.move()
             bullet.draw(self.window)
 
-        for bullet in self.enemy.bullets:
-            bullet.move()
-            bullet.draw(self.window)
+        for enemy in self.enemy_list:
+            for bullet in enemy.bullets:
+                if not bullet.check_position():
+                    enemy.bullets.remove(bullet)
+                    continue
+                bullet.move()
+                bullet.draw(self.window)
 
     def check_colliding(self):
         for enemy in self.enemy_list:
@@ -79,6 +79,8 @@ class Game:
                 if enemy.is_colliding(bullet):
                     self.enemy_list.remove(enemy)
                     self.player.bullets.remove(bullet)
+            for bullet in enemy.bullets:
+                self.player.is_colliding(bullet)
 
 
 
