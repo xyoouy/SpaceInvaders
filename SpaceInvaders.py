@@ -10,7 +10,7 @@ pygame.init()
 class Game:
     WINDOW_WIDTH = 670
     WINDOW_HEIGHT = 900
-    FPS = 300
+    FPS = 120
 
     def Run(self):
         self.setup_game()
@@ -31,7 +31,6 @@ class Game:
         for bullet in self.player.bullets:
             if not bullet.check_position():
                 self.player.bullets.remove(bullet)
-                continue
             bullet.move()
             bullet.draw(self.window)
 
@@ -39,7 +38,6 @@ class Game:
             for bullet in enemy.bullets:
                 if not bullet.check_position():
                     enemy.bullets.remove(bullet)
-                    continue
                 bullet.move()
                 bullet.draw(self.window)
 
@@ -49,9 +47,14 @@ class Game:
                 if enemy.is_colliding(bullet):
                     self.enemies.remove(enemy)
                     self.player.bullets.remove(bullet)
-            for bullet in enemy.bullets:
-                if self.player.is_colliding(bullet):
-                    enemy.bullets.remove(bullet)
+            for enemy_bullet in enemy.bullets:
+                if self.player.is_colliding(enemy_bullet):
+                    enemy.bullets.remove(enemy_bullet)
+                for player_bullet in self.player.bullets:
+                    if player_bullet.is_colliding(enemy_bullet):
+                        enemy.bullets.remove(enemy_bullet)
+                        self.player.bullets.remove(player_bullet)
+                        break
 
     def player_behavior(self):
         keys = pygame.key.get_pressed()

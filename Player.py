@@ -4,15 +4,17 @@ from Bullet import Bullet
 
 
 class Player:
-    speed = 1
+    speed = 1.25
     is_draw = False
     dead = False
     bullets = list()
+    scale = 3
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.sprite = pygame.transform.scale(pygame.image.load("Sprites/PlayerSprite.png"), (50, 50))
+        self.sprite = pygame.transform.scale(
+            pygame.image.load("Sprites/PlayerSprite.png"), (13 * self.scale, 8 * self.scale))
         self.rect = self.sprite.get_rect().move((x, y))
 
     def move(self, direction, window_width):
