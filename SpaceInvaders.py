@@ -21,6 +21,7 @@ class Game:
 
             self.player_behavior()
             self.enemy_behavior()
+            self.player.respawn()
 
             self.check_colliding()
             self.check_bullets()

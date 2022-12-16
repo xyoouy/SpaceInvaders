@@ -38,7 +38,6 @@ class Enemy:
             if self.x < 0:
                 self.direction = Direction.RIGHT
         if self.x <= window_width - self.rect.width and self.direction == Direction.RIGHT:
-            print("move right")
             self.x += self.speed
             if self.x > window_width - self.rect.width:
                 self.direction = Direction.LEFT

@@ -7,10 +7,14 @@ class Player:
     speed = 1.25
     is_draw = False
     dead = False
+    lives = 2
     bullets = list()
     scale = 3
+    respawn_time = 10
+    respawn_timer = 0
 
     def __init__(self, x, y):
+        self.start_x = x
         self.x = x
         self.y = y
         self.sprite = pygame.transform.scale(
@@ -48,4 +52,19 @@ class Player:
             self.dead = self.rect.colliderect(bullet.rect)
 
         return self.dead
+
+    def respawn(self):
+        if self.respawn_time < self.respawn_timer or self.lives < 0:
+            return
+        if self.dead:
+            self.respawn_timer += 0.1
+        if self.respawn_time < self.respawn_timer:
+            print(self.lives)
+            self.x = self.start_x
+            self.rect.x = self.x
+            self.respawn_timer = 0
+            self.lives -= 1
+            self.dead = False
+
+
 
