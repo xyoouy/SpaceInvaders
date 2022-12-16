@@ -33,6 +33,6 @@ class Bullet:
             if self.y < 100:
                 return False
         if self.bullet_type == BulletType.Enemy:
-            if self.y > 800:
+            if self.y > 1000:
                 return False
         return True

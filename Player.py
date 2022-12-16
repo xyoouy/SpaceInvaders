@@ -45,3 +45,5 @@ class Player:
         if not bullet.bullet_type == BulletType.Player:
             self.dead = self.rect.colliderect(bullet.rect)
 
+        return self.dead
+
