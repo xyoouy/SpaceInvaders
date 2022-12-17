@@ -3,6 +3,7 @@ import sys
 from Player import Player
 from Enums import Direction, Color
 from Enemy import Enemy
+from Text import Text
 
 pygame.init()
 
@@ -22,6 +23,11 @@ class Game:
             self.player_behavior()
             self.enemy_behavior()
             self.player.respawn()
+
+            for text in self.texts:
+                text.update_text(f"{self.player.lives}")
+                text.draw(self.window)
+
 
             self.check_colliding()
             self.check_bullets()
@@ -88,10 +94,14 @@ class Game:
         self.window = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.set_caption("Space Invaders")
         self.player = Player(300, 780)
-        self.enemies = [Enemy(400, 200), Enemy(300, 150)]
+        self.enemies = [Enemy(400, 350), Enemy(300, 400)]
         self.player.draw(self.window)
         for enemy in self.enemies:
             enemy.draw(self.window)
+        self.texts = list()
+        self.texts.append(Text(f"{self.player.lives}", 25, 876, Color.Cyan.value, Color.Black.value, "pixelated.ttf", 28))
+        for text in self.texts:
+            text.draw(self.window)
         pygame.display.update()
 
 

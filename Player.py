@@ -7,7 +7,7 @@ class Player:
     speed = 1.25
     is_draw = False
     dead = False
-    lives = 2
+    lives = 3
     bullets = list()
     scale = 3
     respawn_time = 10
@@ -54,7 +54,7 @@ class Player:
         return self.dead
 
     def respawn(self):
-        if self.respawn_time < self.respawn_timer or self.lives < 0:
+        if self.respawn_time < self.respawn_timer or self.lives <= 0:
             return
         if self.dead:
             self.respawn_timer += 0.1

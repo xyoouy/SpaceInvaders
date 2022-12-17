@@ -10,21 +10,23 @@ class Enemy:
     speed = 7.5
     bullets = list()
     scale = 3
+    shoot_timer = 0
+    current_sprite = 1
+    dead = False
+    direction = Direction.LEFT
+    move_timer = 0
+
+    move_timer_length = 1
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.shoot_timer = 0
         self.shoot_timer_length = random.randint(2, 6)
-        self.current_sprite = 1
-        self.dead = False
+
         self.color = Color.Green.value
         self.sprite = pygame.transform.scale(pygame.image.load(f"Sprites/Enemy{self.current_sprite}green.png"),
                                              (11 * self.scale, 8 * self.scale))
         self.rect = self.sprite.get_rect().move((x, y))
-        self.direction = Direction.LEFT
-        self.move_timer = 0
-        self.move_timer_length = 1
 
     def move(self, window_width):
         if self.dead:
