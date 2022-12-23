@@ -13,7 +13,7 @@ class Player:
         self.dead = False
         self.respawn_timer = 0
         self.bullets = list()
-        self.lives = 3
+        self.lives = 2
         self.start_x = x
         self.x = x
         self.y = y
@@ -56,12 +56,12 @@ class Player:
     def is_colliding_enemy(self, enemy):
         if self.rect.colliderect(enemy.rect):
             self.dead = True
-            self.lives = 0
+            self.lives = -1
             return True
         return False
 
     def respawn(self):
-        if self.respawn_time < self.respawn_timer or self.lives <= 0:
+        if self.respawn_time < self.respawn_timer or self.lives < 0:
             return
         if self.dead:
             self.respawn_timer += 0.1

@@ -21,6 +21,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.score = 0
         self.enemies = None
+        self.level = 1
         self.window = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         self.player = Player(322, 780)
         pygame.display.set_caption("Space Invaders")
@@ -29,6 +30,8 @@ class Game:
             Text(f"LIVES: {self.player.lives}", 60, 876, Color.Cyan.value, Color.Black.value, "pixelated.ttf", 28))
         self.texts.append(
             Text(f"SCORE: {self.score}", 120, 60, Color.Cyan.value, Color.Black.value, "pixelated.ttf", 45))
+        self.texts.append(
+            Text(f"LEVEL: {self.level}", 550, 60, Color.k.value, Color.Black.value, "pixelated.ttf", 45))
         self.count = None
         self.start_count = None
         self.menu = Menu()
@@ -51,7 +54,6 @@ class Game:
 
             self.player_behavior()
             self.enemy_behavior()
-
 
             self.draw_all()
             self.game_over()
@@ -181,12 +183,14 @@ class Game:
         self.draw_all()
 
     def restart(self):
+        self.level = 1
         self.create_enemies(11, 5)
         self.create_walls()
         self.score = 0
         self.player = Player(322, 780)
 
     def create_new_level(self):
+        self.level += 1
         self.create_enemies(11, 5)
         self.create_walls()
 
@@ -202,16 +206,16 @@ class Game:
             for element in range(row_count):
                 y += 45
                 if element == 0:
-                    self.enemies[column_index][element] = Enemy(x, y, 2, False)
+                    self.enemies[column_index][element] = Enemy(x, y, 2, False, self.level)
                 elif 0 < element < 3:
-                    self.enemies[column_index][element] = Enemy(x, y, 1, False)
+                    self.enemies[column_index][element] = Enemy(x, y, 1, False, self.level)
                 elif element == 4:
-                    self.enemies[column_index][element] = Enemy(x, y, 3, True)
+                    self.enemies[column_index][element] = Enemy(x, y, 3, True, self.level)
                 else:
-                    self.enemies[column_index][element] = Enemy(x, y, 3, False)
+                    self.enemies[column_index][element] = Enemy(x, y, 3, False, self.level)
 
     def game_over(self):
-        if self.player.lives == 0:
+        if self.player.lives < 0:
             self.restart()
             self.menu.menu_loop(self.Run)
 
@@ -233,6 +237,7 @@ class Game:
         for text in self.texts:
             self.texts[0].update_text(f"LIVES: {self.player.lives}")
             self.texts[1].update_text(f"SCORE: {self.score}")
+            self.texts[2].update_text(f"LEVEL: {self.level}")
             text.draw(self.window)
 
         pygame.display.update()

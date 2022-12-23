@@ -11,7 +11,8 @@ class Enemy:
     direction = Direction.LEFT
     move_timer_length = 1
 
-    def __init__(self, x, y, enemy_type, is_shooter):
+    def __init__(self, x, y, enemy_type, is_shooter, level):
+        self.level = level
         self.bullets = list()
         self.shoot_timer = 0
         self.move_timer = 0
@@ -21,7 +22,7 @@ class Enemy:
         self.type = enemy_type
         self.x = x
         self.y = y
-        self.shoot_timer_length = random.randint(7, 15) + self.x % 3
+        self.shoot_timer_length = random.randint(3, 5) + self.x % 3
 
         self.color = Color.Green
         self.sprite = pygame.transform.scale(
@@ -32,7 +33,7 @@ class Enemy:
     def move(self, window_width, coef):
         if self.dead:
             return
-        if self.move_timer - self.move_timer_length * coef**0.85 < 0.01:
+        if self.move_timer - ((self.move_timer_length - self.level/10) * coef**0.85) < 0.01:
             self.move_timer += 0.015
             return
 
@@ -96,7 +97,7 @@ class Enemy:
         if len(self.bullets) < 1 and self.shoot_timer >= self.shoot_timer_length:
             self.bullets.append(Bullet(self.x, self.y + 10 * self.scale, self.color.value, BulletType.Enemy))
             self.shoot_timer = 0
-            self.shoot_timer_length = random.randint(7, 15)
+            self.shoot_timer_length = random.randint(3, 7)
 
     def is_colliding(self, bullet):
         if self.dead:

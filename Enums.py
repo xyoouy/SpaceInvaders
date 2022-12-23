@@ -19,4 +19,5 @@ class Color(Enum):
     Pink = (255, 0, 255)
     Yellow = (255, 255, 0)
     Red = (255, 0, 0)
+    k = (0, 0, 255)
 
