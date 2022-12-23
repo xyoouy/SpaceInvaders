@@ -5,15 +5,15 @@ from Bullet import Bullet
 
 class Player:
     speed = 1.25
-    is_draw = False
-    dead = False
-    lives = 3
-    bullets = list()
     scale = 3
     respawn_time = 10
-    respawn_timer = 0
 
     def __init__(self, x, y):
+        self.is_draw = False
+        self.dead = False
+        self.respawn_timer = 0
+        self.bullets = list()
+        self.lives = 3
         self.start_x = x
         self.x = x
         self.y = y
@@ -41,10 +41,10 @@ class Player:
         if self.dead:
             return
 
-        if len(self.bullets) < 5:
+        if len(self.bullets) < 1:
             self.bullets.append(Bullet(self.x, self.y, Color.Cyan, BulletType.Player))
 
-    def is_colliding(self, bullet):
+    def is_colliding_bullet(self, bullet):
         if self.dead:
             return
 
@@ -52,6 +52,13 @@ class Player:
             self.dead = self.rect.colliderect(bullet.rect)
 
         return self.dead
+
+    def is_colliding_enemy(self, enemy):
+        if self.rect.colliderect(enemy.rect):
+            self.dead = True
+            self.lives = 0
+            return True
+        return False
 
     def respawn(self):
         if self.respawn_time < self.respawn_timer or self.lives <= 0:
@@ -65,6 +72,3 @@ class Player:
             self.respawn_timer = 0
             self.lives -= 1
             self.dead = False
-
-
-
